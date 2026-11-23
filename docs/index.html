@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tikhon — лаунчер Minecraft</title>
+<meta name="description" content="Tikhon — бесплатный лаунчер Minecraft: сборки с модами в пару кликов, Modrinth и CurseForge, шейдеры, скины, свой сервер и друзья по коду.">
+<meta property="og:title" content="Tikhon — лаунчер Minecraft">
+<meta property="og:description" content="Сборки с модами, шейдеры, скины, свой сервер и друзья по коду. Бесплатно, на русском.">
+<meta property="og:image" content="https://vdvfdr-lab.github.io/tikhon/img/home.png">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1013; --panel: #16181c; --card: #1d2025; --border: #2b2f36;
+    --text: #eceef1; --muted: #9aa0aa; --accent: #ff8f3f; --accent-2: #ffb27a; --on-accent: #1d120a;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f5f6f8; --panel: #ffffff; --card: #ffffff; --border: #dfe2e8;
+      --text: #1b1e24; --muted: #5f6672; --accent: #e8731f; --accent-2: #ff9a52; --on-accent: #ffffff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.55 Inter, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  header { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px);
+           background: color-mix(in srgb, var(--bg) 80%, transparent); border-bottom: 1px solid var(--border); }
+  header .wrap { display: flex; align-items: center; gap: 12px; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: var(--text); }
+  .brand img { width: 32px; height: 32px; }
+  nav { margin-left: auto; display: flex; gap: 22px; }
+  nav a { color: var(--muted); font-weight: 600; font-size: 15px; }
+  nav a:hover { color: var(--text); text-decoration: none; }
+
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border-radius: 14px;
+         font-weight: 700; font-size: 17px; border: 1px solid var(--border); color: var(--text); background: var(--card); }
+  .btn:hover { text-decoration: none; border-color: var(--accent); }
+  .btn.primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: var(--on-accent);
+                 border: none; box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 35%, transparent); }
+  .btn.primary:hover { filter: brightness(1.05); }
+  .btn svg { width: 20px; height: 20px; }
+
+  .hero { padding: 72px 0 40px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: -40% -10% auto; height: 520px; z-index: -1;
+                  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent); }
+  .hero img.logo { width: 92px; height: 92px; }
+  .hero h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.08; margin: 18px 0 14px; letter-spacing: -0.02em; }
+  .hero h1 span { color: var(--accent); }
+  .hero p.lead { font-size: 19px; color: var(--muted); max-width: 680px; margin: 0 auto 30px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .meta { margin-top: 14px; color: var(--muted); font-size: 14px; }
+  .shot-main { margin: 46px auto 0; max-width: 1040px; border-radius: 16px; overflow: hidden;
+               border: 1px solid var(--border); box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  .shot-main img { display: block; width: 100%; height: auto; }
+
+  section { padding: 64px 0; }
+  h2 { font-size: clamp(26px, 4vw, 36px); margin: 0 0 10px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 32px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+  .card .ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+              background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); margin-bottom: 14px; }
+  .card .ic svg { width: 22px; height: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .gallery figure { margin: 0; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .gallery img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+  .gallery figcaption { padding: 10px 14px; color: var(--muted); font-size: 14px; }
+
+  .steps { counter-reset: s; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .steps .card { position: relative; padding-top: 52px; }
+  .steps .card::before { counter-increment: s; content: counter(s); position: absolute; top: 18px; left: 22px;
+                         width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--on-accent);
+                         display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+  details { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
+  summary { cursor: pointer; font-weight: 700; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+  .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; place-items: center; z-index: 50; padding: 16px; }
+  .lightbox.on { display: grid; }
+  .lightbox img { max-width: 100%; max-height: 100%; border-radius: 10px; }
+  @media (max-width: 640px) { nav { display: none; } .hero { padding-top: 48px; } section { padding: 44px 0; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="img/logo.svg" alt="">Tikhon</a>
+    <nav>
+      <a href="#features">Возможности</a>
+      <a href="#screens">Скриншоты</a>
+      <a href="#install">Установка</a>
+      <a href="#faq">Вопросы</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <img class="logo" src="img/logo.svg" alt="Логотип Tikhon">
+      <h1>Minecraft с модами —<br><span>в пару кликов</span></h1>
+      <p class="lead">Tikhon — бесплатный лаунчер на русском. Сборки с модами, шейдеры и ресурспаки
+        из Modrinth и CurseForge, скины, свой сервер и друзья по коду — всё в одном окне.</p>
+      <div class="cta">
+        <a class="btn primary" id="dl" href="https://github.com/vdvfdr-lab/tikhon/releases/latest/download/TikhonSetup.exe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
+          Скачать для Windows
+        </a>
+        <a class="btn" href="https://github.com/vdvfdr-lab/tikhon/releases/latest/download/Tikhon.exe">Портативная версия (.exe)</a>
+      </div>
+      <div class="meta" id="meta">Windows 10 / 11 · 64-бит · ~45 МБ · бесплатно</div>
+      <div class="shot-main"><img src="img/home.png" alt="Главный экран Tikhon" width="1280" height="800"></div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>Что умеет</h2>
+      <p class="sub">Всё, что нужно, чтобы играть с модами и друзьями — без ручной возни с файлами.</p>
+      <div class="grid">
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg></div>
+          <h3>Сборки с модами</h3><p>Fabric, NeoForge, Forge и Quilt ставятся сами. Каждая сборка — отдельная игра со своими модами и мирами.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></div>
+          <h3>Modrinth и CurseForge</h3><p>Каталог модов, шейдеров, ресурспаков, датапаков и карт с картинками — установка одной кнопкой, зависимости подтягиваются сами.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 15l-3-3c1.5-5 6-9 14-9 0 8-4 12.5-9 14z"/></svg></div>
+          <h3>Ускорение</h3><p>Память подбирается под сборку, оптимизированные настройки Java и моды-ускорители в один клик.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.8"/><path d="M2 20.5c0-3.9 3.1-6.5 7-6.5s7 2.6 7 6.5"/><path d="M19 8v6M16 11h6"/></svg></div>
+          <h3>Друзья и сборки по коду</h3><p>Обменяйтесь кодами в любом чате — без регистрации. Сборку можно отправить коротким кодом или файлом.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="7" rx="2"/><rect x="3" y="13.5" width="18" height="7" rx="2"/></svg></div>
+          <h3>Свой сервер</h3><p>Обычный или с модами вашей сборки — запускается кнопкой, клиентские моды на сервер не попадают.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3L3 6l2 5 3-1v11h8V10l3 1 2-5-5-3c0 2-1.8 3-4 3S8 5 8 3z"/></svg></div>
+          <h3>Скины и аккаунты</h3><p>Вход через Microsoft, Ely.by или по нику. Библиотека скинов с превью персонажа.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.4-1.3-1.6-1.3-2.8 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-4.2-4-7.5-9-7.5z"/></svg></div>
+          <h3>Под себя</h3><p>Темы, любой цвет, обои на всё окно, шрифты с кириллицей и плавные анимации.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></div>
+          <h3>Обновляется сам</h3><p>Новая версия — плашка «Обновить» в лаунчере. Всё хранится в одной папке рядом с программой.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <div class="wrap">
+      <h2>Скриншоты</h2>
+      <p class="sub">Нажми на картинку, чтобы увеличить.</p>
+      <div class="gallery">
+        <figure><img src="img/mods.png" alt="Каталог модов" loading="lazy"><figcaption>Каталог модов, шейдеров и ресурспаков</figcaption></figure>
+        <figure><img src="img/friends.png" alt="Друзья" loading="lazy"><figcaption>Друзья по коду — без регистрации</figcaption></figure>
+        <figure><img src="img/settings.png" alt="Оформление" loading="lazy"><figcaption>Темы, цвета, обои и шрифты</figcaption></figure>
+        <figure><img src="img/home-light.png" alt="Светлая тема" loading="lazy"><figcaption>Светлая тема с обоями</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2>Установка</h2>
+      <p class="sub">Java ставить не нужно — лаунчер скачает всё сам.</p>
+      <div class="steps">
+        <div class="card"><h3>Скачай установщик</h3><p>Кнопка <a href="https://github.com/vdvfdr-lab/tikhon/releases/latest/download/TikhonSetup.exe">«Скачать для Windows»</a> вверху страницы.</p></div>
+        <div class="card"><h3>Запусти его</h3><p>Если Windows покажет «Система Windows защитила ваш компьютер» — нажми «Подробнее» → «Выполнить в любом случае». Так бывает с программами без платной подписи.</p></div>
+        <div class="card"><h3>Выбери ник и играй</h3><p>Лаунчер встретит коротким приветствием: ник, оформление — и можно жать «Играть».</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Вопросы</h2>
+      <details><summary>Это бесплатно?</summary><p>Да, полностью. Лаунчер скачивает игру с официальных серверов Mojang, моды — с Modrinth и CurseForge.</p></details>
+      <details><summary>Нужен ли купленный Minecraft?</summary><p>Для игры на официальных серверах и входа через Microsoft — да, нужна купленная Minecraft: Java Edition. Кроме того, можно войти через Ely.by или играть по нику на своём сервере и в одиночной игре.</p></details>
+      <details><summary>Куда устанавливаются игра и моды?</summary><p>В папку <code>data</code> рядом с лаунчером: ничего не разбрасывается по системе, официальный <code>.minecraft</code> не трогается. Папку можно переносить целиком.</p></details>
+      <details><summary>Как поиграть с другом?</summary><p>В разделе «Друзья» обменяйтесь кодами, сборку отправьте кнопкой «Поделиться». Сервер запускается в разделе «Сервер»; если вы не в одной сети — подойдёт Radmin VPN или ZeroTier.</p></details>
+      <details><summary>Что-то не работает</summary><p>В лаунчере есть служба поддержки (кнопка со спасательным кругом): частые вопросы и отчёт об ошибке, который можно отправить разработчику.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© Tikhon · <a href="https://github.com/vdvfdr-lab/tikhon/releases">Все версии</a></div>
+    <div>Не является официальным продуктом Minecraft. Не одобрено и не связано с Mojang или Microsoft.</div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lb"><img alt=""></div>
+<script>
+  // Номер последней версии — из того же файла, по которому обновляются лаунчеры
+  fetch("https://api.github.com/repos/vdvfdr-lab/tikhon/releases/latest")
+    .then(r => r.ok ? r.json() : null)
+    .then(rel => {
+      if (!rel) return;
+      const exe = (rel.assets || []).find(a => a.name === "TikhonSetup.exe");
+      const size = exe ? ` · ${Math.round(exe.size / 1048576)} МБ` : "";
+      document.getElementById("meta").textContent =
+        `Версия ${rel.tag_name.replace(/^v/, "")} · Windows 10 / 11 · 64-бит${size} · бесплатно`;
+    }).catch(() => {});
+  const lb = document.getElementById("lb");
+  document.querySelectorAll(".gallery img, .shot-main img").forEach(img =>
+    img.addEventListener("click", () => { lb.querySelector("img").src = img.src; lb.classList.add("on"); }));
+  lb.addEventListener("click", () => lb.classList.remove("on"));
+</script>
+</body>
+</html>
