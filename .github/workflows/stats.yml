@@ -1,0 +1,38 @@
+# Настоящие скачивания Tikhon для значка в README и сайта.
+# Считаются только файлы, которые качают люди: установщики и портативная версия.
+# Tikhon.exe / TikhonApp.zip / latest.json качают сами лаунчеры при обновлении — их не считаем.
+name: Статистика скачиваний
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Посчитать
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          total=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate \
+            --jq '[.[].assets[] | select(.name == "TikhonSetup.exe" or .name == "CatLauncherSetup.exe" or .name == "TikhonPortable.exe") | .download_count] | add // 0' \
+            | awk '{s += $1} END {print s + 0}')
+          echo "Скачиваний: $total"
+          mkdir -p docs
+          printf '{"schemaVersion": 1, "label": "скачиваний", "message": "%s", "color": "ff8f3f"}\n' "$total" > docs/stats.json
+      - name: Сохранить, если изменилось
+        run: |
+          if git diff --quiet -- docs/stats.json; then echo "Без изменений"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/stats.json
+          git commit -m "Статистика скачиваний"
+          git push

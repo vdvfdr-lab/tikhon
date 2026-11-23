@@ -119,7 +119,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
           Скачать для Windows
         </a>
-        <a class="btn" href="https://github.com/vdvfdr-lab/tikhon/releases/latest/download/Tikhon.exe">Портативная версия (.exe)</a>
+        <a class="btn" href="https://github.com/vdvfdr-lab/tikhon/releases/latest/download/TikhonPortable.exe">Портативная версия (.exe)</a>
       </div>
       <div class="meta" id="meta">Windows 10 / 11 · 64-бит · ~45 МБ · бесплатно</div>
       <div class="shot-main"><img src="img/home.png" alt="Главный экран Tikhon" width="1280" height="800"></div>
@@ -197,15 +197,23 @@
 
 <div class="lightbox" id="lb"><img alt=""></div>
 <script>
-  // Номер последней версии — из того же файла, по которому обновляются лаунчеры
-  fetch("https://api.github.com/repos/vdvfdr-lab/tikhon/releases/latest")
+  // Версия и честное число скачиваний: только установщик и портативная версия —
+  // то, что качают люди (обновления самих лаунчеров не считаются)
+  const PEOPLE = ["TikhonSetup.exe", "CatLauncherSetup.exe", "TikhonPortable.exe"];
+  fetch("https://api.github.com/repos/vdvfdr-lab/tikhon/releases?per_page=100")
     .then(r => r.ok ? r.json() : null)
-    .then(rel => {
-      if (!rel) return;
+    .then(rels => {
+      if (!rels || !rels.length) return;
+      const rel = rels.find(x => !x.draft && !x.prerelease) || rels[0];
       const exe = (rel.assets || []).find(a => a.name === "TikhonSetup.exe");
       const size = exe ? ` · ${Math.round(exe.size / 1048576)} МБ` : "";
+      const total = rels.flatMap(x => x.assets || []).filter(a => PEOPLE.includes(a.name))
+                        .reduce((s, a) => s + a.download_count, 0);
+      const word = n => (n % 10 === 1 && n % 100 !== 11) ? "раз"
+                      : ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) ? "раза" : "раз";
       document.getElementById("meta").textContent =
-        `Версия ${rel.tag_name.replace(/^v/, "")} · Windows 10 / 11 · 64-бит${size} · бесплатно`;
+        `Версия ${rel.tag_name.replace(/^v/, "")} · Windows 10 / 11 · 64-бит${size} · бесплатно` +
+        (total ? ` · скачали ${total} ${word(total)}` : "");
     }).catch(() => {});
   const lb = document.getElementById("lb");
   document.querySelectorAll(".gallery img, .shot-main img").forEach(img =>

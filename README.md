@@ -19,7 +19,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/vdvfdr-lab/tikhon?label=%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F&color=ff8f3f" alt="версия">
-  <img src="https://img.shields.io/github/downloads/vdvfdr-lab/tikhon/total?label=%D1%81%D0%BA%D0%B0%D1%87%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D0%B9&color=2ec4b6" alt="скачиваний">
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvdvfdr-lab%2Ftikhon%2Fmain%2Fdocs%2Fstats.json&color=2ec4b6" alt="скачиваний">
   <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-4aa8ff" alt="Windows 10/11">
 </p>
 
@@ -45,7 +45,7 @@
 ## Установка
 
 1. Скачай [**TikhonSetup.exe**](https://github.com/vdvfdr-lab/tikhon/releases/latest/download/TikhonSetup.exe)
-   (или [портативный Tikhon.exe](https://github.com/vdvfdr-lab/tikhon/releases/latest/download/Tikhon.exe) — просто положи в любую папку).
+   (или [портативную версию](https://github.com/vdvfdr-lab/tikhon/releases/latest/download/TikhonPortable.exe) — положи в любую папку и запусти, лаунчер докачается сам).
 2. Если Windows покажет «Система Windows защитила ваш компьютер» — «Подробнее» → «Выполнить в любом случае»
    (так бывает с программами без платной подписи).
 3. Введи ник, выбери оформление — и жми «Играть». Java и игру лаунчер скачает сам.
@@ -63,5 +63,8 @@
 
 ---
 
-<sub>Не является официальным продуктом Minecraft. Не одобрено и не связано с Mojang или Microsoft.
+<sub>Счётчик скачиваний честный: считаются только установщик и портативная версия — то, что качают
+люди. Проверки и загрузки обновлений самими лаунчерами в него не входят.
+
+Не является официальным продуктом Minecraft. Не одобрено и не связано с Mojang или Microsoft.
 Шрифты в лаунчере — под лицензией SIL Open Font License.</sub>
